@@ -1,24 +1,9 @@
 import React, { FormEvent, FormEventHandler } from 'react'
-
+import {useAuth} from './../../context/auth-context'
 const apiUrl = process.env.REACT_APP_API_URL;
 export  const LoginScreen = () => {
 
-    //登录入口
-    const login = (param:{username:string, password:string}) => {
-        fetch(`${apiUrl}/register`,{
-            method: 'POST',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify(param)
-        }).then(
-            async (response:Response) => {
-                console.log(response)
-                if(response.ok){
-                }
-            }
-        )
-    }
+    const {login,user} = useAuth();
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();//阻止表单提交的默认行为
@@ -28,6 +13,11 @@ export  const LoginScreen = () => {
     }
 
     return <form onSubmit={handleSubmit}>
+        {
+            user ? <div>
+                登录成功,用户名：{user?.name}
+            </div> : null
+        }
         <div>
             <label htmlFor="username">用户名：</label>
             <input type="text" id={'username'} />
